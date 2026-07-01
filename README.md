@@ -51,7 +51,7 @@ Output: `out/target/product/X6886/OrangeFox-R12.0-Unofficial-X6886.img`
 
 ## Downloads
 
-Check the [Releases](https://github.com/Il103/twrp_device_infinix_X6886/releases) page for the latest builds.
+Check the [Releases](https://github.com/Il103/recovery_device_infinix_X6886/releases) page for the latest builds.
 
 ## Credits
 
