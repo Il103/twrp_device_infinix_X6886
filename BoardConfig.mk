@@ -201,10 +201,6 @@ OF_USE_LZMA_COMPRESSION := 1
 OF_USE_ICON_BITMAP := 1
 OF_THEME := dark
 
-# Flashlight
-OF_FL_PATH1 := /sys/class/leds/flashlight/brightness
-OF_FL_PATH2 := /sys/class/leds/led:torch_0/brightness
-
 # Encryption - Auto decrypt on boot
 OF_FIX_DECRYPTION_ON_DATA_MEDIA := 1
 OF_KEEP_DM_VERITY_FORCE_ENCRYPTION := 1
@@ -266,10 +262,6 @@ OF_FBE_METADATA_MOUNT_IGNORE := 1
 
 # Settings persistence (uses /cache which is always accessible)
 FOX_SETTINGS_ROOT_DIRECTORY := /cache
-
-# Vibrator
-OF_SUPPORT_VIBRATOR := 1
-TW_CUSTOM_VIBRATOR_PATH := "/sys/class/leds/vibrator/brightness"
 
 # Extra OrangeFox goodies
 OF_ENABLE_FRP_ADDON := 1
