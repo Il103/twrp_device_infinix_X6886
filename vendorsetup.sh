@@ -9,5 +9,5 @@ add_lunch_combo ofox_X6886-ap2a-userdebug
 add_lunch_combo ofox_X6886-ap2a-user
 
 # OrangeFox R14.1 maintainer patch version
-export FOX_MAINTAINER_PATCH_VERSION="01"
+export FOX_MAINTAINER_PATCH_VERSION=1
 export FOX_BUILD_TYPE="Stable"
