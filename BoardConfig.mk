@@ -159,7 +159,7 @@ TARGET_OTA_ASSERT_DEVICE := Infinix-X6886
 
 # Display
 TARGET_SCREEN_DENSITY := 440
-TW_FRAMERATE := 60
+TW_FRAMERATE := 120
 TW_THEME := portrait_hdpi
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
@@ -174,14 +174,14 @@ TARGET_INIT_VENDOR_LIB := libinit_Infinix-X6886
 TARGET_RECOVERY_DEVICE_MODULES := libinit_Infinix-X6886
 
 # TWRP Configs
-TW_DEVICE_VERSION := BeRu
+TW_DEVICE_VERSION := R14.1-BeRu
 
 # ========== OUR ADDITIONS ==========
 
 # 64-bit support
 TARGET_SUPPORTS_64_BIT_APPS := true
 
-# Display - OrangeFox R12.1
+# Display - OrangeFox R14.1
 TARGET_SCREEN_WIDTH := 1080
 TARGET_SCREEN_HEIGHT := 2408
 TW_ROTATION := 0
@@ -193,25 +193,28 @@ OF_STATUS_INDENT_RIGHT := 70
 OF_CLOCK_POS := right
 OF_ALLOW_DISABLE_NAVBAR := 1
 OF_HIDE_NOTCH := 1
-OF_DISPLAY_120HZ_SUPPORT := 1
-OF_DISPLAY_144HZ_SUPPORT := 1
+
+# High refresh rate: smooth 120Hz scrolling (R14.1 enables this via TW_FRAMERATE)
+TW_FRAMERATE := 120
 
 # OrangeFox Features
 OF_USE_LZMA_COMPRESSION := 1
 OF_USE_ICON_BITMAP := 1
 OF_THEME := dark
 
-# Flashlight
-OF_FL_PATH1 := /sys/class/leds/flashlight/brightness
-OF_FL_PATH2 := /sys/class/leds/led:torch_0/brightness
+# Flashlight (sysfs nodes pulled from stock dump: /sys/devices/virtual/torch/*)
+OF_FLASHLIGHT_ENABLE := 1
+OF_FL_PATH1 := /sys/devices/virtual/torch/torch/torch_level
+OF_FL_PATH2 := /sys/devices/virtual/sub_torch/sub_torch/sub_torch_level
 
-# Encryption - Auto decrypt on boot
+# Encryption - Auto decrypt on boot (R14.1 verified flags only)
 OF_FIX_DECRYPTION_ON_DATA_MEDIA := 1
-OF_KEEP_DM_VERITY_FORCE_ENCRYPTION := 1
-OF_SKIP_DECRYPTION := 1
 OF_SKIP_FBE_DECRYPTION := 0
 OF_DONT_PATCH_ENCRYPTED_DEVICE := 1
-OF_FORCE_DECRYPT_ON_BOOT := 1
+
+# Force Format Data: reliable wipe of /data + /metadata
+OF_FORCE_DATA_FORMAT_F2FS := 1
+OF_WIPE_METADATA_AFTER_DATAFORMAT := 1
 
 # Security
 OF_ADVANCED_SECURITY := 1
@@ -261,15 +264,22 @@ TW_EXTERNAL_STORAGE_PREFIX := "/external_sd"
 # Maintainer
 OF_MAINTAINER := B E R U
 
-# Suppress metadata mount errors
+# FBE metadata mount ignore
 OF_FBE_METADATA_MOUNT_IGNORE := 1
 
 # Settings persistence (uses /cache which is always accessible)
 FOX_SETTINGS_ROOT_DIRECTORY := /cache
 
-# Vibrator
-OF_SUPPORT_VIBRATOR := 1
-TW_CUSTOM_VIBRATOR_PATH := "/sys/class/leds/vibrator/brightness"
+# Vibrator / haptics (node pulled from stock dump)
+TW_CUSTOM_VIBRATOR_PATH := "/sys/class/leds/vibrator_single/brightness"
+TW_SUPPORT_INPUT_AIDL_HAPTICS := true
+
+# Languages (all extra locales enabled; Material YOU theming is provided by the R14.1 base)
+TW_EXTRA_LANGUAGES := true
+TW_DEFAULT_LANGUAGE := en
+
+# Do NOT show the boot log screen (prevents the hang at recovery entry)
+TW_NO_SHOW_LOG := true
 
 # Extra OrangeFox goodies
 OF_ENABLE_FRP_ADDON := 1
