@@ -37,7 +37,7 @@ Device tree for building **OrangeFox R14.1** recovery (TWRP-based) for the Infin
 
 ```bash
 source build/envsetup.sh
-lunch ofox_X6886-eng
+lunch ofox_X6886-ap2a-eng
 export ALLOW_MISSING_DEPENDENCIES=true
 m vendorbootimage
 ```

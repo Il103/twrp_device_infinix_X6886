@@ -8,6 +8,6 @@ PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/ofox_X6886.mk
 
 COMMON_LUNCH_CHOICES := \
-    ofox_X6886-eng \
-    ofox_X6886-userdebug \
-    ofox_X6886-user
+    ofox_X6886-ap2a-eng \
+    ofox_X6886-ap2a-userdebug \
+    ofox_X6886-ap2a-user
