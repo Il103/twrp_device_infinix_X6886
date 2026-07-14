@@ -1,42 +1,35 @@
-# TWRP Device Tree for Infinix X6886 (MT6789)
+# OrangeFox Recovery — Infinix X6886 (MT6789 / Helio G99)
 
 | | |
 |---|---|
-| **Device** | Infinix X6886 |
+| **Device** | Infinix X6886 (Note 12 G96) |
 | **SoC** | MediaTek Helio G99 (MT6789) |
-| **Arch** | arm64 (A/B + VAB) |
+| **Arch** | arm64 — A/B + VAB |
+| **Recovery** | OrangeFox R12.1 (Android 12.1) |
 | **Maintainer** | B E R U (@Il103) |
 
-Device tree for building **OrangeFox R12.0** / **TWRP** recovery for the Infinix X6886.
+Device tree for building **OrangeFox R12.1** recovery for the Infinix X6886.
+Place this tree at `device/infinix/X6886/` in an OrangeFox R12.1 build tree.
 
-## Features ✨
+## Features
 
-- **Vendor boot image** (header v4)
-- **Auto-decrypt** with lockscreen password (FBE v2 + Metadata Encryption)
-- **Auto-boot to system**
-- **MTP** enabled
-- **Fastbootd** support
+- **Vendor boot image** (header v4) — builds as `vendorbootimage`
+- **Auto-decrypt** with lockscreen password (FBE v2 + Metadata Encryption) on boot
+- **Format Data** — wipes `/metadata` automatically (no encryption mismatch after format)
 - **Flashlight** toggle in status bar
-- **Dark theme** (default)
-- **Gesture navigation** (configurable)
-- **Vibrator** support
-- **KernelSU** support
-- **FRP** addon
-- **Brightness** control (max 255)
-- **External SD** card support
+- **Vibrator** feedback support
+- **120 Hz / 144 Hz** display refresh support
+- **Material You** theme (selectable in Customization → Theme) + dark theme default
+- **Gesture / modern navigation** (navbar can be disabled)
+- **MTP**, **Fastbootd**, **External SD**, **Brightness** control
+- **KernelSU** support, **FRP** addon
 - **Settings persistence** across reboots (stored in `/cache`)
 
 ## Requirements
 
 - Unlocked bootloader
-- OrangeFox R12.0 build tree (based on Android 12)
-- AOSP / LineageOS 12.1
-
-## Build Notes
-
-- Uses prebuilt kernel + DTB from stock (`TARGET_NO_KERNEL := true`)
-- Builds as `vendor_boot` image (header version 4)
-- Base device tree: `ofox-12.1` branch
+- OrangeFox R12.1 build tree (Android 12.1)
+- Prebuilt kernel + DTB from stock (`TARGET_NO_KERNEL := true`)
 
 ## Build
 
@@ -47,11 +40,12 @@ export ALLOW_MISSING_DEPENDENCIES=true
 m vendorbootimage
 ```
 
-Output: `out/target/product/X6886/OrangeFox-R12.0-Unofficial-X6886.img`
+Output: `out/target/product/X6886/OrangeFox-R12.1-Unofficial-X6886.img`
 
-## Downloads
+## Notes
 
-Check the [Releases](https://github.com/Il103/recovery_device_infinix_X6886/releases) page for the latest builds.
+- Flash via fastboot: `fastboot flash vendor_boot out/target/product/X6886/OrangeFox-R12.1-Unofficial-X6886.img`
+- On first boot, enter your lockscreen password when prompted to decrypt `/data`.
 
 ## Credits
 
