@@ -15,6 +15,7 @@ export FOX_BUILD_TYPE="Stable"
 # Build a recovery for a vendor_boot-as-recovery (hdr4) device
 export FOX_VENDOR_BOOT_RECOVERY=1
 
-# Fix: recovery hanging at the OrangeFox logo
-export OF_NO_KEYMASTER_VER_4X=1
-export OF_SKIP_FBE_DECRYPTION=1
+# Fix: keystore2 crashes (SIGABRT) in recovery, causing a hang at the splash
+# while trying to decrypt /data (FBE metadata encryption). Replace keystore2
+# with the prebuilt api_36 version which works standalone in recovery.
+export FOX_ADD_API_V36_PREBUILTS=2
