@@ -142,4 +142,5 @@ Only flash **stock boot.img** or a **vendor kernel built specifically for MT6789
 ## Credits
 
 - B E R U
+- TWRP Team
 - OrangeFox Team
