@@ -141,5 +141,5 @@ Only flash **stock boot.img** or a **vendor kernel built specifically for MT6789
 
 ## Credits
 
-- [Rey](https://github.com/rey-early) — base device tree
+- B E R U
 - OrangeFox Team
