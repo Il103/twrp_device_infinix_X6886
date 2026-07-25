@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Device** | Infinix HOT 60 Pro Plus (X6886) |
-| **SoC** | MediaTek MT6789 (Helio G99) |
+| **SoC** | MediaTek MT6789 (Helio G200) |
 | **CPU** | 6x Cortex-A55 @2.0GHz + 2x Cortex-A76 @2.2GHz |
 | **GPU** | Mali-G57 MC2 (Valhall) @1100MHz |
 | **Display** | 1224x2720 AMOLED, 144Hz, density 392 |
