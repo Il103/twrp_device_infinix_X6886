@@ -1,1 +1,34 @@
-# Device-specific init for Infinix X6886 (MT6789)
+# Device-specific init for Infinix X6886 (MT6789) - Recovery
+
+on init
+    # Display backlight
+    chown system system /sys/class/leds/lcd-backlight/brightness
+    chmod 0666 /sys/class/leds/lcd-backlight/brightness
+
+    # Fingerprint
+    chmod 0666 /dev/goodix_fp
+
+    # Touch Panel permissions
+    chmod 0666 /sys/kernel/tran_display/lcm_name
+    chmod 0666 /sys/kernel/tran_display/lcm_hbm_state
+    chmod 0666 /sys/kernel/tran_display/lcm_dimming_state
+    chmod 0666 /sys/devices/platform/soc/14013000.dsi/lcm_hbm_state
+
+    # LED
+    chmod 0666 /sys/class/leds/red/brightness
+    chmod 0666 /sys/class/leds/green/brightness
+    chmod 0666 /sys/class/leds/blue/brightness
+
+    # Vibrator
+    chmod 0666 /sys/class/leds/vibrator/brightness
+
+    # Thermal
+    chmod 0666 /sys/devices/virtual/thermal/thermal_zone*/temp
+
+on boot
+    # Touch Panel parameters
+    chown root diag /sys/module/tpd_setting/parameters/tpd_calmat
+    chown root diag /sys/module/tpd_setting/parameters/tpd_em_debounce_time
+    chown root diag /sys/module/tpd_setting/parameters/tpd_mode
+    chown root diag /sys/module/tpd_debug/parameters/tpd_em_log
+    chown root diag /sys/module/tpd_debug/parameters/tpd_em_log_to_fs
