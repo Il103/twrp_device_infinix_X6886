@@ -16,7 +16,6 @@ on fs
 
 on post-fs-data
     start health-hal-2-1
-    start mobicore
 
 on boot
     setprop sys.usb.config adb
