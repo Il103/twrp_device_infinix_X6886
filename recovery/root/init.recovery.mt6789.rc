@@ -55,7 +55,7 @@ service vendor.keymint-trustonic /vendor/bin/hw/android.hardware.security.keymin
 
 on property:ro.crypto.state=encrypted && property:ro.boot.dynamic_partitions=true
     start mobicore
-    wait /dev/mobicore
+    sleep 1
     start vendor.gatekeeper-1-0
     start vendor.keymint-trustonic
     setprop crypto.ready 1
@@ -65,7 +65,7 @@ on property:ro.crypto.state=unencrypted
 
 on property:ro.crypto.type=file && property:ro.crypto.state=encrypted
     start mobicore
-    wait /dev/mobicore
+    sleep 1
     start vendor.gatekeeper-1-0
     start vendor.keymint-trustonic
     setprop crypto.ready 1
