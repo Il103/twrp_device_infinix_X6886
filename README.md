@@ -83,17 +83,27 @@ Flashing a GKI kernel (e.g., from KernelSU GKI builds, or any `Image.gz`-based k
 ### If you bricked your device
 
 1. **Try entering Fastboot Mode**: Hold `Volume Down` + `Power` for 10 seconds
-2. **Flash stock boot.img and vbmeta** via fastboot:
+2. **Use Penumbra** (recommended — [GitHub](https://github.com/shomykohai/penumbra) | [Docs](https://penumbra.itssho.my/Penumbra/Antumbra/CLI)):
    ```bash
-   # First, disable AVB verification:
-   fastboot flash vbmeta ~/path/to/vbmeta.img --disable-verification --disable-verity
+   # Install (Linux):
+   cargo install penumbra
+   # Or download prebuilt from GitHub Releases
 
-   # Then restore stock kernel:
-   fastboot flash boot ~/path/to/stock_boot.img
-   fastboot flash vendor_boot ~/path/to/stock_vendor_boot.img
-   fastboot reboot
+   # List all partitions:
+   antumbra pgpt --da DA.bin
+
+   # Disable AVB verification by flashing patched vbmeta:
+   antumbra write vbmeta_a vbmeta_disabled.img --da DA.bin
+
+   # Restore stock kernel:
+   antumbra write boot_a stock_boot.img --da DA.bin
+   antumbra write vendor_boot_a stock_vendor_boot.img --da DA.bin
+
+   # Reboot to normal mode:
+   antumbra reboot normal --da DA.bin
    ```
-3. **If fastboot does not work**: Use **SP Flash Tool** (MTK Flash Tool) with a scatter file to reflash all partitions.
+   > **Note**: You need a DA (Download Agent) file for MT6789. Check the [Penumbra payloads repo](https://github.com/shomykohai/mtk-payloads) or extract from stock firmware.
+3. **If Penumbra does not work**: Use **SP Flash Tool** (MTK Flash Tool) with a scatter file as a last resort.
 
 ### What CAN be flashed to /boot
 
