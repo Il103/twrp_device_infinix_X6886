@@ -16,8 +16,32 @@
 | **Recovery** | OrangeFox R12.1 (Android 12.1) |
 | **Maintainer** | B E R U (@Il103) |
 
-Device tree for building **OrangeFox R12.1** recovery for the Infinix X6886.
-Place this tree at `device/infinix/X6886/` in an OrangeFox R12.1 build tree.
+## Partition Layout (Verified from Stock Dump)
+
+| Partition | Block Device | Content | Notes |
+|-----------|-------------|---------|-------|
+| `/boot` | `/dev/block/by-name/boot` | **Kernel** (18.7MB vendor kernel) | A/B, slotselect |
+| `/vendor_boot` | `/dev/block/by-name/vendor_boot` | Vendor ramdisk + DTB + kernel modules | Header v4, A/B |
+| `/dtbo` | `/dev/block/by-name/dtbo` | Device Tree Overlay (8MB) | A/B |
+| `/vbmeta` | `/dev/block/by-name/vbmeta` | AVB metadata | A/B, verification enabled |
+| `/vbmeta_system` | `/dev/block/by-name/vbmeta_system` | System AVB keys | A/B |
+| `/vbmeta_vendor` | `/dev/block/by-name/vbmeta_vendor` | Vendor AVB keys | A/B |
+
+## Build
+
+```bash
+source build/envsetup.sh
+lunch ofox_X6886-eng
+export ALLOW_MISSING_DEPENDENCIES=true
+m vendorbootimage
+```
+
+Output: `out/target/product/X6886/OrangeFox-R12.1-Unofficial-X6886.img`
+
+Flash via fastboot:
+```bash
+fastboot flash vendor_boot out/target/product/X6886/OrangeFox-R12.1-Unofficial-X6886.img
+```
 
 ## Features
 
@@ -33,23 +57,6 @@ Place this tree at `device/infinix/X6886/` in an OrangeFox R12.1 build tree.
 - **FRP** addon
 - **Settings persistence** across reboots (stored in `/cache`)
 
-## Requirements
-
-- Unlocked bootloader
-- OrangeFox R12.1 build tree (Android 12.1)
-- Prebuilt kernel + DTB from stock (`TARGET_NO_KERNEL := true`)
-
-## Build
-
-```bash
-source build/envsetup.sh
-lunch ofox_X6886-eng
-export ALLOW_MISSING_DEPENDENCIES=true
-m vendorbootimage
-```
-
-Output: `out/target/product/X6886/OrangeFox-R12.1-Unofficial-X6886.img`
-
 ## Format Data
 
 If Format Data fails with "Failed to format block" or crypto errors:
@@ -57,13 +64,51 @@ If Format Data fails with "Failed to format block" or crypto errors:
 1. Use `sbin/formatdata.sh` from adb shell, OR
 2. Flash stock recovery first to format, then reflash OrangeFox
 
+---
+
+## WARNING: Custom Kernel / GKI Flashing
+
+### This device uses a vendor kernel (NOT GKI)
+
+The stock kernel is a **Transsion vendor kernel** built for MT6789. It is **NOT** a Generic Kernel Image (GKI). The device tree uses `TARGET_NO_KERNEL := true` with a prebuilt vendor kernel.
+
+### DO NOT flash GKI kernels
+
+Flashing a GKI kernel (e.g., from KernelSU GKI builds, or any `Image.gz`-based kernel) to the `/boot` partition **will brick your device** because:
+
+1. **AVB (Android Verified Boot) is enabled** — the stock vbmeta verifies the kernel signature. A GKI kernel signed with a different key will fail verification and the bootloader will refuse to boot.
+2. **Missing vendor drivers** — the vendor kernel contains Transsion/MTK-specific drivers for the touchscreen (Goodix), display (NT36672E AMOLED), fingerprint (Goodix), flashlight (AW36515), and other hardware. A GKI kernel lacks all of these.
+3. **Both `/boot` and `/vendor_boot` may become unbootable** — if AVB fails at the `/boot` level, the entire boot chain is broken, and the device may not enter recovery.
+
+### If you bricked your device
+
+1. **Try entering Fastboot Mode**: Hold `Volume Down` + `Power` for 10 seconds
+2. **Flash stock boot.img and vbmeta** via fastboot:
+   ```bash
+   # First, disable AVB verification:
+   fastboot flash vbmeta ~/path/to/vbmeta.img --disable-verification --disable-verity
+
+   # Then restore stock kernel:
+   fastboot flash boot ~/path/to/stock_boot.img
+   fastboot flash vendor_boot ~/path/to/stock_vendor_boot.img
+   fastboot reboot
+   ```
+3. **If fastboot does not work**: Use **SP Flash Tool** (MTK Flash Tool) with a scatter file to reflash all partitions.
+
+### What CAN be flashed to /boot
+
+Only flash **stock boot.img** or a **vendor kernel built specifically for MT6789/X6886** to the `/boot` partition. Custom kernels must be built from the Transsion/MTK kernel source with all vendor drivers included.
+
+---
+
 ## Notes
 
-- Flash via fastboot: `fastboot flash vendor_boot out/target/product/X6886/OrangeFox-R12.1-Unofficial-X6886.img`
 - On first boot, enter your lockscreen password when prompted to decrypt `/data`.
 - **fstab flags** match stock exactly (`checkpoint=fs`, `quota`, `fsverity`, `sysfs_path`) — critical for Format Data on MTK UFS.
+- Stock AVB uses Transsion-specific keys (`tran_avb.pubkey`) for `tr_*` partitions (tr_mi, tr_theme, tr_region, etc.).
+- Stock uses DSDS (2 SIM).
 
-## Hardware (verified from stock dump)
+## Hardware (Verified from Stock Dump)
 
 - **CPU**: 6x Cortex-A55 (cluster0) + 2x Cortex-A76 (cluster1) — big.LITTLE
 - **GPU**: Mali-G57 MC2 (Valhall architecture) @ 1100MHz
@@ -76,8 +121,8 @@ If Format Data fails with "Failed to format block" or crypto errors:
 - **TEE**: Trustonic
 - **Charging**: MT6375
 - **Android**: 15 (API 35), SELinux enforcing
-- **WiFi**: MediaTek connac (built-in)
-- **Bluetooth**: MediaTek (built-in)
+- **WiFi/BT**: MediaTek connac (built-in)
+- **AVB**: Enabled (Transsion vendor keys)
 
 ## Credits
 
