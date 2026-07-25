@@ -207,8 +207,8 @@ OF_USE_LZ4_COMPRESSION := 1
 OF_USE_GREEN_LED := 1
 
 # Flashlight
-OF_FL_PATH1 := /sys/class/leds/flashlight/brightness
-OF_FL_PATH2 := /sys/class/leds/led:torch_0/brightness
+OF_FL_PATH1 := /sys/devices/virtual/torch/torch/torch_level
+OF_FL_PATH2 := /sys/devices/virtual/flashlight_core/flashlight/flashlight_torch
 
 # Encryption
 OF_FIX_DECRYPTION_ON_DATA_MEDIA := 1
