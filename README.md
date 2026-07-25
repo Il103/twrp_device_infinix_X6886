@@ -83,7 +83,7 @@ Flashing a GKI kernel (e.g., from KernelSU GKI builds, or any `Image.gz`-based k
 ### If you bricked your device
 
 1. **Try entering Fastboot Mode**: Hold `Volume Down` + `Power` for 10 seconds
-2. **Use Penumbra** (recommended — [GitHub](https://github.com/shomykohai/penumbra) | [Docs](https://penumbra.itssho.my/Penumbra/Antumbra/CLI)):
+2. **Use Penumbra** ([GitHub](https://github.com/shomykohai/penumbra) | [Docs](https://penumbra.itssho.my/Penumbra/Antumbra/CLI)):
 
    **Download the DA file**: [DA_BR_MT6789_transsion.bin](https://www.mediafire.com/file/tgv1s2ffk69z6jq/DA_BR_MT6789_transsion.bin/file)
 
@@ -109,7 +109,6 @@ Flashing a GKI kernel (e.g., from KernelSU GKI builds, or any `Image.gz`-based k
    # Reboot to normal mode:
    antumbra reboot normal --da DA_BR_MT6789_transsion.bin
    ```
-3. **If Penumbra does not work**: Use **SP Flash Tool** (MTK Flash Tool) with a scatter file as a last resort.
 
 ### What CAN be flashed to /boot
 
