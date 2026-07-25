@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2022 The LineageOS Project
+# Copyright (C) 2024 OrangeFox Recovery Project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -8,10 +9,10 @@ DEVICE_PATH := device/infinix/X6886
 
 # Architecture
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a
+TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT := cortex-a55
 
 # Power
 ENABLE_CPUSETS := true
@@ -57,10 +58,10 @@ BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
 # AVB
 BOARD_AVB_ENABLE := true
 
-# Partitions configs
-BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
+# Partitions
+BOARD_FLASH_BLOCK_SIZE := 262144
 BOARD_MAIN_SIZE := 12670140416
-BOARD_SUPER_PARTITION_SIZE := 9126805504 # TODO: Fix hardcoded value
+BOARD_SUPER_PARTITION_SIZE := 9126805504
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_USES_METADATA_PARTITION := true
 BOARD_SUPER_PARTITION_GROUPS := main
@@ -93,7 +94,7 @@ TARGET_BOARD_PLATFORM := mt6789
 # Properties
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
-# Recovery
+# Recovery - A/B device with vendor_boot ramdisk
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
 BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
@@ -104,18 +105,18 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-# Crypto
+# Crypto - FBE with Trustonic TEE
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_CRYPTO_FBE := true
 TW_USE_FSCRYPT_POLICY := 2
 TW_FORCE_KEYMASTER_VER := 4
 OF_DEFAULT_KEYMASTER_VERSION := 4
 
-# The path to a temperature sensor
-TW_CUSTOM_CPU_TEMP_PATH := "/sys/devices/virtual/thermal/thermal_zone19/temp"
+# Thermal
+TW_CUSTOM_CPU_TEMP_PATH := /sys/devices/virtual/thermal/thermal_zone19/temp
 
-# Hack
-PLATFORM_SECURITY_PATCH := 2099-06-05
+# Security patches
+PLATFORM_SECURITY_PATCH := 2025-06-05
 PLATFORM_VERSION := 15
 PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
@@ -127,6 +128,9 @@ TW_INCLUDE_NTFS_3G := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LPTOOLS := true
+TW_INCLUDE_EXFAT := true
+TW_INCLUDE_FUSE_EXFAT := true
+TW_INCLUDE_FUSE_NTFS := true
 
 # F2FS
 TW_ENABLE_FS_COMPRESSION := false
@@ -150,12 +154,18 @@ TW_NO_SCREEN_BLANK := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TARGET_USES_MKE2FS := true
 TW_LOAD_VENDOR_BOOT_MODULES := true
+TW_USE_TOOLBOX := true
+TW_USE_NEW_MINADBD := true
+TW_HAS_MTP := true
+TW_MTP_DEVICE := /dev/mtp_usb
+TW_INCLUDE_MTP := true
+TW_EXCLUDE_DEFAULT_USB_INIT := true
 
 # Hack depends
 ALLOW_MISSING_DEPENDENCIES := true
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := Infinix-X6886
+TARGET_OTA_ASSERT_DEVICE := X6886
 
 # Display
 TARGET_SCREEN_DENSITY := 392
@@ -173,15 +183,12 @@ TW_CUSTOM_BATTERY_POS := 800
 TARGET_INIT_VENDOR_LIB := libinit_Infinix-X6886
 TARGET_RECOVERY_DEVICE_MODULES += libinit_Infinix-X6886
 
-# TWRP Configs
+# Device version
 TW_DEVICE_VERSION := BeRu
 
-# ========== OUR ADDITIONS ==========
+# ========== OrangeFox R12.1 ==========
 
-# 64-bit support
-TARGET_SUPPORTS_64_BIT_APPS := true
-
-# Display - OrangeFox R12.1
+# Screen
 TARGET_SCREEN_WIDTH := 1224
 TARGET_SCREEN_HEIGHT := 2720
 TW_ROTATION := 0
@@ -193,95 +200,60 @@ OF_STATUS_INDENT_RIGHT := 70
 OF_CLOCK_POS := right
 OF_ALLOW_DISABLE_NAVBAR := 1
 OF_HIDE_NOTCH := 1
-OF_DISPLAY_120HZ_SUPPORT := 1
 OF_DISPLAY_144HZ_SUPPORT := 1
 
-# OrangeFox Features
-OF_USE_LZMA_COMPRESSION := 1
-OF_USE_ICON_BITMAP := 1
-OF_THEME := dark
+# OrangeFox Theme
+OF_USE_LZ4_COMPRESSION := 1
+OF_USE_GREEN_LED := 1
 
 # Flashlight
 OF_FL_PATH1 := /sys/class/leds/flashlight/brightness
 OF_FL_PATH2 := /sys/class/leds/led:torch_0/brightness
 
-# Encryption - Auto decrypt on boot
+# Encryption
 OF_FIX_DECRYPTION_ON_DATA_MEDIA := 1
 OF_KEEP_DM_VERITY_FORCE_ENCRYPTION := 1
 OF_SKIP_FBE_DECRYPTION := 0
 OF_DONT_PATCH_ENCRYPTED_DEVICE := 1
 OF_FORCE_DECRYPT_ON_BOOT := 1
+OF_FBE_METADATA_MOUNT_IGNORE := 1
 
 # Security
 OF_ADVANCED_SECURITY := 1
 OF_USE_MAGISKBOOT := 1
 OF_USE_MAGISKBOOT_FOR_ALL_PATCHES := 1
 
-# Misc OrangeFox
+# OrangeFox Misc
 OF_NO_MIUI_PATCH_WARNING := 1
 OF_NO_TREBLE_CHECK := 1
 OF_DISABLE_MIUI_SPECIFIC_FEATURES := 1
 OF_AB_DEVICE_WITH_RECOVERY_PARTITION := 1
 OF_UNMOUNT_DATA_FIRST := 1
+OF_DISABLE_ORS_AUTO_REBOOT := 1
+OF_NO_SPLASH_CHANGE := 1
 
-# MTP & USB
-TW_INCLUDE_MTP := true
-TW_HAS_MTP := true
-TW_MTP_DEVICE := /dev/mtp_usb
-TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_USE_MODEM_HARDWARE_KEY := true
+# Vibrator
+OF_SUPPORT_VIBRATOR := 1
+TW_CUSTOM_VIBRATOR_PATH := /sys/class/leds/vibrator/brightness
 
-# FRP
-TW_INCLUDE_FRP := true
-
-# KernelSU
-TW_INCLUDE_KERNELSU := true
-
-# File system tools
-TW_INCLUDE_EXFAT := true
-TW_INCLUDE_FUSE_EXFAT := true
-TW_INCLUDE_FUSE_NTFS := true
-TW_INCLUDE_PYTHON := true
-
-# Debug
-TW_EXTRA_EVENT_LOG_ENABLED := true
-TW_INCLUDE_CRYPTO_UMS := true
-
-# Misc
-TW_USE_NEW_MINADBD := true
-TW_NO_LEGACY_PROPS := true
-TW_DATA_RECOVERY := true
-BOARD_SUPPRESS_SECURE_ERASE := true
-
-# External SD
-TW_EXTERNAL_STORAGE_PATH := "/external_sd"
-TW_EXTERNAL_STORAGE_PREFIX := "/external_sd"
+# Settings persistence
+FOX_SETTINGS_ROOT_DIRECTORY := /cache
 
 # Maintainer
 OF_MAINTAINER := B E R U
 
-# Suppress metadata mount errors
-OF_FBE_METADATA_MOUNT_IGNORE := 1
+# FRP
+TW_INCLUDE_FRP := true
 
-# Settings persistence (uses /cache which is always accessible)
-FOX_SETTINGS_ROOT_DIRECTORY := /cache
-
-# Vibrator
-OF_SUPPORT_VIBRATOR := 1
-TW_CUSTOM_VIBRATOR_PATH := "/sys/class/leds/vibrator/brightness"
-
-# Extra OrangeFox goodies
-OF_ENABLE_FRP_ADDON := 1
-OF_DISABLE_OTA_MENU := 1
-OF_USE_GREEN_LED := 1
-OF_DISABLE_ORS_AUTO_REBOOT := 1
-OF_NO_SPLASH_CHANGE := 1
-
-# Extra tools
-TW_INCLUDE_LIBRESETPROP := true
-TW_CRYPTO_USE_FBE := true
-TW_CRYPTO_FBE := true
+# External SD
+TW_EXTERNAL_STORAGE_PATH := /external_sd
+TW_EXTERNAL_STORAGE_PREFIX := /external_sd
 
 # Performance
 TW_LOAD_VENDOR_MODULES := true
-TW_USE_TOOLBOX := true
+
+# Security hardening
+BOARD_SUPPRESS_SECURE_ERASE := true
+
+# Disable OTA menu in OrangeFox (custom ROM use)
+OF_DISABLE_OTA_MENU := 1

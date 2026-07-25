@@ -25,10 +25,28 @@ void vendor_load_properties()
     for (const string &prop : prop_partitions)
     {
         property_override(string("ro.product.") + prop + string("brand"), "Infinix");
-        property_override(string("ro.product.") + prop + string("name"), "X6886-OP");
-        property_override(string("ro.product.") + prop + string("device"), "Infinix-X6886");
+        property_override(string("ro.product.") + prop + string("name"), "X6886");
+        property_override(string("ro.product.") + prop + string("device"), "X6886");
         property_override(string("ro.product.") + prop + string("model"), "Infinix X6886");
-        property_override(string("ro.product.") + prop + string("marketname"), "Infinix HOT 60 PRO PLUS");
-        property_override(string("ro.product.system.") + prop + string("device"), "Infinix HOT 60 PRO PLUS");
+        property_override(string("ro.product.") + prop + string("marketname"), "Infinix HOT 60 Pro Plus");
+        property_override(string("ro.product.") + prop + string("manufacturer"), "INFINIX");
+        property_override(string("ro.product.") + prop + string("board"), "X6886");
     }
+
+    // Device fingerprint
+    property_override("ro.build.display.id", "BeRu-OrangeFox-X6886");
+    property_override("ro.build.description", "X6886-userdebug");
+    property_override("ro.build.flavor", "X6886-userdebug");
+
+    // Hardware
+    property_override("ro.hardware", "mt6789");
+    property_override("ro.board.platform", "mt6789");
+
+    // TEE (Trustonic)
+    property_override("ro.vendor.mtk_tee_gp_support", "1");
+    property_override("ro.vendor.mtk_trustonic_tee_support", "1");
+
+    // Storage (UFS)
+    property_override("ro.hardware.egl", "mali");
+    property_override("ro.hardware.vulkan", "mali");
 }

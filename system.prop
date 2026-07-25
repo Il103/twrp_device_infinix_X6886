@@ -4,14 +4,28 @@ ro.postinstall.fstab.prefix=/system
 # USB MTP
 ro.sys.usb.storage.type=mtp
 
-# Crypto
+# Crypto - FBE
 ro.crypto.volume.filenames_mode=aes-256-cts
 
-# Gatekeeper
+# Gatekeeper (Trustonic)
 ro.hardware.gatekeeper=trustonic
 
 # TEE
 ro.vendor.mtk_tee_gp_support=1
 ro.vendor.mtk_trustonic_tee_support=1
 
+# Keymaster
 keymaster_ver=4.1
+
+# Hardware
+ro.hardware=mt6789
+ro.board.platform=mt6789
+
+# Build
+ro.build.product=X6886
+ro.build.device=X6886
+ro.product.device=X6886
+
+# Hardware rendering
+ro.hardware.egl=mali
+ro.hardware.vulkan=mali
