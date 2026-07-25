@@ -3,11 +3,14 @@
 | | |
 |---|---|
 | **Device** | Infinix HOT 60 Pro Plus (X6886) |
-| **SoC** | MediaTek MT6789 (Helio G200) |
+| **SoC** | MediaTek MT6789 (Helio G99) |
+| **CPU** | 6x Cortex-A55 @2.0GHz + 2x Cortex-A76 @2.2GHz |
+| **GPU** | Mali-G57 MC2 (Valhall) @1100MHz |
 | **Display** | 1224x2720 AMOLED, 144Hz, density 392 |
-| **Touch** | FocalTech FT3683G |
+| **Touch** | Goodix (under-display) |
 | **Fingerprint** | Goodix (under-display) |
 | **Storage** | UFS |
+| **RAM** | LPDDR4X |
 | **SIM** | Dual (DSDS) |
 | **Arch** | arm64 — A/B + VAB |
 | **Recovery** | OrangeFox R12.1 (Android 12.1) |
@@ -21,10 +24,10 @@ Place this tree at `device/infinix/X6886/` in an OrangeFox R12.1 build tree.
 - **Vendor boot image** (header v4) — builds as `vendorbootimage`
 - **Auto-decrypt** with lockscreen password (FBE v2 + Metadata Encryption) on boot
 - **Format Data** — wipes `/metadata` automatically (no encryption mismatch after format)
-- **Flashlight** toggle in status bar
-- **Vibrator** feedback support
+- **Flashlight** toggle (AW36515 LED driver, torch + sub_torch + flashlight_core)
+- **Vibrator** feedback (regulator-based + AAC RichTap haptic)
 - **144 Hz** display refresh support
-- **Material You** theme (selectable in Customization) + dark theme default
+- **Material You** theme + dark theme default
 - **Gesture / modern navigation** (navbar can be disabled)
 - **MTP**, **Fastbootd**, **External SD**, **Brightness** control
 - **FRP** addon
@@ -60,14 +63,21 @@ If Format Data fails with "Failed to format block" or crypto errors:
 - On first boot, enter your lockscreen password when prompted to decrypt `/data`.
 - **fstab flags** match stock exactly (`checkpoint=fs`, `quota`, `fsverity`, `sysfs_path`) — critical for Format Data on MTK UFS.
 
-## Specs (from stock dump)
+## Hardware (verified from stock dump)
 
-- **CPU**: Cortex-A55 (4x) + Cortex-A76 (4x)
-- **GPU**: Mali-G57 MC2
-- **Camera**: 108MP main + 2MP depth
-- **Battery**: 5000mAh, 33W fast charge
-- **Android**: 15 (API 35), SELinux enforcing
+- **CPU**: 6x Cortex-A55 (cluster0) + 2x Cortex-A76 (cluster1) — big.LITTLE
+- **GPU**: Mali-G57 MC2 (Valhall architecture) @ 1100MHz
+- **Display**: 1224x2720 AMOLED, 144Hz, panel NT36672E
+- **Touch**: Goodix under-display
+- **Fingerprint**: Goodix under-display
+- **Flashlight**: AW36515 LED driver (kernel module)
+- **Vibrator**: Regulator-based + AAC RichTap haptic
+- **Storage**: UFS (ufshci@11270000)
 - **TEE**: Trustonic
+- **Charging**: MT6375
+- **Android**: 15 (API 35), SELinux enforcing
+- **WiFi**: MediaTek connac (built-in)
+- **Bluetooth**: MediaTek (built-in)
 
 ## Credits
 
