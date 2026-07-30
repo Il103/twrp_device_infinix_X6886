@@ -3,6 +3,13 @@ import /init.device.rc
 import /init.recovery.usb.rc
 import /init.vibrator.rc
 
+service formatdata /system/bin/formatdata.sh
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:recovery:s0
+
 on init
     setprop sys.usb.configfs 1
     setprop sys.usb.controller musb-hdrc
