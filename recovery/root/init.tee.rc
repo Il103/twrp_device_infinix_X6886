@@ -1,5 +1,8 @@
 # Mobicore (Trustonic TEE) daemon
-service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat
+# NOTE: the --sfs-reformat flag was intentionally removed; it reformats the
+#       TEE secure file system, which is slow and can stall recovery boot,
+#       and recovery does not need it.
+service mobicore /vendor/bin/mcDriverDaemon
     user root
     group root
     disabled
