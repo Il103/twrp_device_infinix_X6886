@@ -6,7 +6,7 @@ on init
     insmod /vendor/lib/modules/leds-aw20144.ko
     insmod /vendor/lib/modules/adaptive-ts.ko
     insmod /vendor/lib/modules/focaltech_noflash_common.ko
-    insmod /vendor/lib/modules/omnivision_td4376.ko
+    # Camera sensor module (omnivision_td4376) intentionally omitted: not needed in recovery and may stall boot
 
 on boot
     # === Display backlight ===
@@ -78,8 +78,8 @@ on boot
     # === Set default backlight level ===
     write /sys/class/leds/lcd-backlight/brightness 128
 
-    # === GPU power control ===
-    write /sys/devices/platform/soc/10000000.mali/devfreq/10000000.mali/governor performance
+    # === GPU power control (ondemand governor keeps display pipeline stable in recovery) ===
+    write /sys/devices/platform/soc/10000000.mali/devfreq/10000000.mali/governor simple_ondemand
 
     # === Touch Panel parameters ===
     chown root diag /sys/module/tpd_setting/parameters/tpd_calmat
